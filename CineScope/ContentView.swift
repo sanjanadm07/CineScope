@@ -1,21 +1,40 @@
-//
-//  ContentView.swift
-//  CineScope
-//
-//  Created by Medhavi Magar on 12/11/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State var isActive: Bool = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            if isActive {
+                LoginView(authRepo: AuthRepositoryImpl(authService: MockAuthServices()))
+            } else {
+                Color.black
+                    .edgesIgnoringSafeArea(.all)
+                VStack {
+                    Spacer()
+                    Image(systemName: "movieclapper.fill")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 100))
+                        .padding()
+                        
+                    Text("CineScope")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                    Text("Your destination for epic movie experiences")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                    ProgressView()
+                        .tint(.white)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    self.isActive = true
+                                }
+                            }
+                        }
+                    Spacer()
+                }
+            }
         }
-        .padding()
     }
 }
 
