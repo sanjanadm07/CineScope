@@ -8,4 +8,7 @@
 import Foundation
 protocol MovieServiceProtocol {
     func fetchPopularMovies() async throws -> MovieResponse
+    func fetchTrendingMovies() async throws -> MovieResponse
+    func fetchUpcomingMovies() async throws -> MovieResponse
+    func searchMovies(query: String) async throws -> MovieResponse
 }

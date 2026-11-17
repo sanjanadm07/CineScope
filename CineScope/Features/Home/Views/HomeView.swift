@@ -29,20 +29,62 @@ struct HomeView: View {
                     .foregroundStyle(.white)
                 
                 // search view
-                //                    SearchView()
+                SearchView(searchText: $viewModel.searchText)
+                ScrollView {
+                    if viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+                        // popular movie posters cards view
+                        MovieCardView(movies: viewModel.popularMovies, heading: "Popular Movies")
+                        
+                        // trending movie cards view
+                        MovieCardView(movies: viewModel.trendingMovies, heading: "Trending Movies")
+                        
+                        // upcoming movie cards view
+                        MovieCardView(movies: viewModel.upcomingMovies, heading: "Upcoming Movies")
+                    } else if viewModel.isSearchLoading {
+                        ProgressView()
+                            .tint(.white)
+                            .frame(maxWidth: .infinity)
+                    } else if viewModel.searchResults.isEmpty {
+                        Text("No movies found")
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                    } else {
+                        // searched rsults
+                        MovieCardView(movies: viewModel.searchResults, heading: "Search Results")
+                    }
+                    
+                }
                 
-                // popular movie posters cards view
-                MovieCardView(movies: viewModel.movies, heading: "Popular")
-                
-                // trenading movie cards view
-                
-                // tab bar
+               
                 Spacer()
             }
             
         }
         .task {
-            await viewModel.fetchMovies()
+            await viewModel.fetchPopularMovies()
+            await viewModel.fetchTrendingMovies()
+            await viewModel.fetchUpcomingMovies()
+        }
+        .task(id: viewModel.searchText) {
+            let query = viewModel.searchText.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+            
+            guard !query.isEmpty else {
+                viewModel.clearSearchResults()
+                return
+            }
+            do {
+                try await Task.sleep(for: .milliseconds(500))
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            await viewModel.searchMovies(query: query)
         }
     }
     

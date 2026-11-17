@@ -10,6 +10,7 @@ enum MovieEndPoint: APIEndpoint {
     case popular
     case trending
     case upcoming
+    case search(query: String)
 }
 
 extension MovieEndPoint {
@@ -21,6 +22,8 @@ extension MovieEndPoint {
             return "3/trending/movie/day"
         case .upcoming:
             return "3/movie/upcoming"
+        case .search:
+            return "3/search/movie"
         }
     }
     
@@ -29,10 +32,19 @@ extension MovieEndPoint {
     }
     
     var queryItems: [URLQueryItem]? {
-        [
-            URLQueryItem(name: "language", value: "en-US"),
-            URLQueryItem(name: "page", value: "1")
-        ]
+        switch self {
+        case .search(let query):
+            return [
+                URLQueryItem(name: "query", value: query),
+                URLQueryItem(name: "language", value: "en-US"),
+                URLQueryItem(name: "page", value: "1")
+            ]
+        default:
+            return [
+                URLQueryItem(name: "language", value: "en-US"),
+                URLQueryItem(name: "page", value: "1")
+            ]
+        }
     }
     
     var headers: [String : String]? {
