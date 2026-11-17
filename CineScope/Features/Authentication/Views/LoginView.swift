@@ -13,6 +13,7 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var showPassword: Bool = false
     @State private var isLoggingIn: Bool = false
+    @State private var navigateToHome: Bool = false
     
     init(authRepo: AuthRepository) {
         _vm = StateObject(wrappedValue: LoginViewModel(authRepo: authRepo))
@@ -55,12 +56,6 @@ struct LoginView: View {
                     .padding()
                     .background(Color.gray)
                     .cornerRadius(10)
-                    //
-                    //                if let error = vm.errorMessage {
-                    //                    Text(error)
-                    //                        .font(.caption)
-                    //                        .foregroundColor(.red)
-                    //                }
                     switch vm.authState {
                         
                     case .loggedOut:
@@ -68,6 +63,7 @@ struct LoginView: View {
                         
                     case .loading:
                         ProgressView()
+                            .tint(Color.white)
                         
                     case .authenticated(let user):
                         Text("Welcome, \(user.name)!")
@@ -101,6 +97,15 @@ struct LoginView: View {
                 }
                 .padding()
                 
+            }
+            .onChange(of: vm.authState) { _, newState in
+                if case .authenticated = newState {
+                    navigateToHome = true
+                }
+            }
+            .navigationDestination(isPresented: $navigateToHome) {
+                HomeView()
+                    .navigationBarBackButtonHidden(true)
             }
         }
     }

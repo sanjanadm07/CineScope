@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AuthState {
+enum AuthState: Equatable {
     case loggedOut
     case loading
     case authenticated(User)

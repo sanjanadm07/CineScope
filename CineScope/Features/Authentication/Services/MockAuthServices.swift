@@ -24,8 +24,8 @@ struct MockAuthServices : AuthServiceProtocol {
         }
         
         // 3. Check mock credentials
-        if email == "test@example.com" && password == "1234" {
-            return User(id: 123, name: "test", email: "test@example.com")
+        if email == "1234@ex.com" && password == "1234" {
+            return User(id: 123, name: "test", email: "1234@ex.com")
         } else {
             throw AuthenticationError.invalidCredentials
         }

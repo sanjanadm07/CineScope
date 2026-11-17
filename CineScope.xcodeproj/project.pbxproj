@@ -29,9 +29,34 @@
 		035E6B7B30A57AC4006F3CCA /* CineScopeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CineScopeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		03060CDB30AAD17500273B77 /* Exceptions for "CineScope" folder in "CineScope" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				.gitignore,
+				Info.plist,
+			);
+			target = 035E6B6330A57AC1006F3CCA /* CineScope */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		03060CE130AAD43700273B77 /* Exceptions for "CineScope" folder in "Compile Sources" phase from "CineScope" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 035E6B6030A57AC1006F3CCA /* Sources */;
+			membershipExceptions = (
+				.gitignore,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		035E6B6630A57AC1006F3CCA /* CineScope */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				03060CDB30AAD17500273B77 /* Exceptions for "CineScope" folder in "CineScope" target */,
+				03060CE130AAD43700273B77 /* Exceptions for "CineScope" folder in "Compile Sources" phase from "CineScope" target */,
+			);
 			path = CineScope;
 			sourceTree = "<group>";
 		};
@@ -271,6 +296,8 @@
 /* Begin XCBuildConfiguration section */
 		035E6B8330A57AC4006F3CCA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 035E6B6630A57AC1006F3CCA /* CineScope */;
+			baseConfigurationReferenceRelativePath = Configuration/Secrects.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -334,6 +361,8 @@
 		};
 		035E6B8430A57AC4006F3CCA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 035E6B6630A57AC1006F3CCA /* CineScope */;
+			baseConfigurationReferenceRelativePath = Configuration/Secrects.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -397,6 +426,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CineScope/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -424,6 +454,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CineScope/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
