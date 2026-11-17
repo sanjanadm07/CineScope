@@ -32,7 +32,8 @@ struct HomeView: View {
                 //                    SearchView()
                 
                 // popular movie posters cards view
-                MovieCardView(movie: viewModel.movies, heading: "Popular")
+                MovieCardView(movies: viewModel.movies, heading: "Popular")
+                
                 // trenading movie cards view
                 
                 // tab bar

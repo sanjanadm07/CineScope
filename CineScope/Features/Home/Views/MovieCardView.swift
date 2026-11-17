@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieCardView: View {
-    let movie: [Movie]
+    let movies: [Movie]
     let heading: String
     
     var body: some View {
@@ -16,29 +16,52 @@ struct MovieCardView: View {
             Text(heading)
                 .font(.headline)
                 .foregroundStyle(.white)
-                .padding(.leading)
+                .padding(.horizontal)
+                .padding(.bottom, 8)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(movie)
+                LazyHStack {
+                    ForEach(movies)
                     { movie in
                         VStack(alignment: .leading, spacing: 8) {
                             ZStack(alignment: .topTrailing) {
                                 // Poster Image
-                                if let image = movie.posterPath {
-                                    Image(image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(height: 240)
-                                        .frame(maxWidth: .infinity)
-                                        .clipped()
+                                if let posterURL = movie.posterURL {
+                                    AsyncImage(url: posterURL) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            ProgressView()
+                                                .tint(.white)
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                .background(Color.gray.opacity(0.2))
+                                            
+                                        case .success(let image):
+                                            image
+                                                .resizable()
+                                                .scaledToFill()
+                                            
+                                        case .failure:
+                                            Image(systemName: "film")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .foregroundStyle(.gray)
+                                                .padding(45)
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                .background(Color.gray.opacity(0.2))
+                                            
+                                        @unknown default:
+                                            EmptyView()
+                                        }
+                                    }
+                                    .frame(width: 150, height: 220)
+                                    .clipped()
                                 } else {
-                                    Rectangle()
-                                        .fill(Color.gray.opacity(0.2))
-                                        .overlay(ProgressView())
-                                        .frame(height: 240)
-                                        .frame(maxWidth: .infinity)
-                                        .clipped()
+                                    Image(systemName: "film")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .foregroundStyle(.gray)
+                                        .frame(width: 150, height: 220)
+                                        .background(Color.gray.opacity(0.2))
                                 }
                                 
                                 // Rating
@@ -76,14 +99,15 @@ struct MovieCardView: View {
                             }
                             .padding([.horizontal, .bottom], 12)
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 150)
                         .background(Color(.secondarySystemBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .shadow(color: .black.opacity(0.12), radius: 8, x: 0, y: 4)
-                        .padding()
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
                     }
                 }
-            }
+            }.fixedSize(horizontal: false, vertical: true)
         }
         
     }
@@ -91,5 +115,5 @@ struct MovieCardView: View {
 }
 
 #Preview {
-    MovieCardView(movie: [Movie(id: 123, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4), Movie(id: 127, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4), Movie(id: 128, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4)], heading: "Popular")
+    MovieCardView(movies: [Movie(id: 123, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4), Movie(id: 127, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4), Movie(id: 128, title: "Dune: Part Two", overview: "Something overview description for preview", posterPath: "", releaseDate: "July 12, 2026", voteAverage: 4)], heading: "Popular")
 }
