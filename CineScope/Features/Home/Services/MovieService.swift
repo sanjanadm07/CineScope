@@ -13,8 +13,8 @@ final class MovieService: MovieServiceProtocol {
         self.apiClient = apiClient
     }
     
-    func fetchPopularMovies() async throws -> MovieResponse {
-        try await apiClient.request(from: MovieEndPoint.popular)
+    func fetchPopularMovies(page: Int) async throws -> MovieResponse {
+        try await apiClient.request(from: MovieEndPoint.popular(page: page))
     }
     
     func fetchTrendingMovies() async throws -> MovieResponse {

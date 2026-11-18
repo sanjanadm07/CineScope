@@ -35,7 +35,7 @@ final class APIClient: APIClientProtocol {
             headers[key] = value
         }
         urlRequest.allHTTPHeaderFields = headers
-        
+        print("URLRequest: \(urlRequest)")
         let data: Data
                 let response: URLResponse
         do {

@@ -7,7 +7,7 @@
 
 import Foundation
 enum MovieEndPoint: APIEndpoint {
-    case popular
+    case popular(page: Int)
     case trending
     case upcoming
     case search(query: String)
@@ -33,6 +33,11 @@ extension MovieEndPoint {
     
     var queryItems: [URLQueryItem]? {
         switch self {
+        case .popular(let page):
+            return  [
+                URLQueryItem(name: "language", value: "en-US"),
+                URLQueryItem(name: "page", value: "\(page)")
+            ]
         case .search(let query):
             return [
                 URLQueryItem(name: "query", value: query),

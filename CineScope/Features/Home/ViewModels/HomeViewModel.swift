@@ -20,6 +20,10 @@ class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var searchResults: [Movie] = []
     @Published var isSearchLoading: Bool = false
+    @Published var currentPage: Int = 1
+    @Published var isLoadingMorePage: Bool = false
+    @Published var totalPages: Int = 1
+    @Published var paginationError: String?
     
     init(movieService: MovieService) {
         self.movieService = movieService
@@ -32,7 +36,10 @@ class HomeViewModel: ObservableObject {
             isPopularLoading = false
         }
         do {
-            popularMovies = try await movieService.fetchPopularMovies().results
+            let response = try await movieService.fetchPopularMovies(page: currentPage)
+            popularMovies = response.results
+            totalPages = response.totalPages
+            currentPage = response.page + 1
         } catch {
             self.error = error.localizedDescription
         }
@@ -59,7 +66,7 @@ class HomeViewModel: ObservableObject {
             isUpcomingLoading = false
         }
         do {
-            let response = try await movieService.fetchTrendingMovies()
+            let response = try await movieService.fetchUpcomingMovies()
             upcomingMovies = response.results
         } catch {
             self.error = error.localizedDescription
@@ -80,9 +87,9 @@ class HomeViewModel: ObservableObject {
             isSearchLoading = false
         }
         do {
-           let response = try await movieService.searchMovies(query: trimmedQuery)
-           try Task.checkCancellation()
-           searchResults = response.results
+            let response = try await movieService.searchMovies(query: trimmedQuery)
+            try Task.checkCancellation()
+            searchResults = response.results
         } catch is CancellationError {
             return
         } catch {
@@ -94,6 +101,28 @@ class HomeViewModel: ObservableObject {
         searchResults = []
         error = nil
         isSearchLoading = false
+    }
+    
+    func loadNextPopularPage() async {
+        guard !isLoadingMorePage else { return }
+        guard hasMorePopularPages else { return }
+        isLoadingMorePage = true
+        paginationError = nil
+        defer {
+            isLoadingMorePage = false
+        }
+        do {
+            let response = try await movieService.fetchPopularMovies(page: currentPage)
+            totalPages = response.totalPages
+            popularMovies.append(contentsOf: response.results)
+            currentPage = response.page + 1
+        } catch {
+            self.paginationError = error.localizedDescription
+        }
+    }
+    
+    var hasMorePopularPages: Bool {
+        currentPage <= totalPages
     }
     
 }
