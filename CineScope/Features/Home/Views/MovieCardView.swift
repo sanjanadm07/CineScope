@@ -69,43 +69,7 @@ extension MovieCardView {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topTrailing) {
                 // Poster Image
-                if let posterURL = movie.posterURL {
-                    AsyncImage(url: posterURL) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                                .tint(.white)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color.gray.opacity(0.2))
-                            
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                            
-                        case .failure:
-                            Image(systemName: "film")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundStyle(.gray)
-                                .padding(45)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(Color.gray.opacity(0.2))
-                            
-                        @unknown default:
-                            EmptyView()
-                        }
-                    }
-                    .frame(width: 150, height: 220)
-                    .clipped()
-                } else {
-                    Image(systemName: "film")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(.gray)
-                        .frame(width: 150, height: 220)
-                        .background(Color.gray.opacity(0.2))
-                }
+                makePosterView(movie)
                 
                 // Rating
                 HStack(spacing: 4) {
@@ -149,6 +113,51 @@ extension MovieCardView {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
     }
+    
+    func makePosterView(_ movie: Movie) -> some View {
+// MARK: Image handling with AsyncImage
+//        if let posterURL = movie.posterURL {
+//            AsyncImage(url: posterURL) { phase in
+//                switch phase {
+//                case .empty:
+//                    ProgressView()
+//                        .tint(.white)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .background(Color.gray.opacity(0.2))
+//                    
+//                case .success(let image):
+//                    image
+//                        .resizable()
+//                        .scaledToFill()
+//                    
+//                case .failure:
+//                    Image(systemName: "film")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .foregroundStyle(.gray)
+//                        .padding(45)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .background(Color.gray.opacity(0.2))
+//                    
+//                @unknown default:
+//                    EmptyView()
+//                }
+//            }
+//            .frame(width: 150, height: 220)
+//            .clipped()
+//        } else {
+//            Image(systemName: "film")
+//                .resizable()
+//                .scaledToFit()
+//                .foregroundStyle(.gray)
+//                .frame(width: 150, height: 220)
+//                .background(Color.gray.opacity(0.2))
+//        }
+        MoviePosterView(posterPath: movie.posterURL)
+            .frame(width: 150, height: 220)
+            .clipped()
+    }
+    
 }
 
 #Preview {
