@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-    
+    @AppStorage("isLoggedIn") private var isLoggedIn = false
     init() {
         do {
             let appConfig = try AppConfiguration()
@@ -21,12 +21,29 @@ struct HomeView: View {
             Color.black
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                Text("Hello, CineScope!")
-                    .font(.title)
-                    .bold()
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
-                    .foregroundStyle(.white)
+                HStack {
+                    Text("Hello, CineScope!")
+                        .font(.title)
+                        .bold()
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Button {
+                        isLoggedIn = false
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                            
+                            Text("Logout")
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .background(Color.red.opacity(0.8))
+                        .clipShape(Capsule())
+                    }
+                }
+                .padding()
                 
                 // search view
                 SearchView(searchText: $viewModel.searchText)

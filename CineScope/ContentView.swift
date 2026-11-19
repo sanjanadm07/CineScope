@@ -2,10 +2,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State var isActive: Bool = false
+    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     var body: some View {
         ZStack {
             if isActive {
-                LoginView(authRepo: AuthRepositoryImpl(authService: MockAuthServices()))
+                if isLoggedIn {
+                    HomeView()
+                } else {
+                    LoginView(authRepo: AuthRepositoryImpl(authService: MockAuthServices()))
+                }
             } else {
                 Color.black
                     .edgesIgnoringSafeArea(.all)
