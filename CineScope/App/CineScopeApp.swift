@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct CineScopeApp: App {
+    @StateObject private var coordinator = AppCoordinator()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(coordinator: coordinator)
                 .environment(
                     \.managedObjectContext,
                     PersistenceController.shared.container.viewContext

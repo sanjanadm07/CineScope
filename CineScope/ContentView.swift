@@ -3,11 +3,12 @@ import SwiftUI
 struct ContentView: View {
     @State var isActive: Bool = false
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @ObservedObject var coordinator: AppCoordinator
     var body: some View {
         ZStack {
             if isActive {
                 if isLoggedIn {
-                    MainTabView()
+                    MainTabView(coordinator: coordinator)
                 } else {
                     LoginView(authRepo: AuthRepositoryImpl(authService: MockAuthServices()))
                 }
@@ -44,5 +45,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(coordinator: AppCoordinator())
 }

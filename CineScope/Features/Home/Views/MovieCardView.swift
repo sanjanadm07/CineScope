@@ -17,6 +17,7 @@ struct MovieCardView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(sortDescriptors: [])
     private var favorite: FetchedResults<FavoriteMovie>
+    var onMovieSelected: ((Movie) -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,6 +41,9 @@ struct MovieCardView: View {
                                 if lastIndex >= movies.count - 3 {
                                     onLastMovieAppeared?()
                                 }
+                            }
+                            .onTapGesture {
+                                onMovieSelected?(movie)
                             }
                     }
                     if isLoadingMore {

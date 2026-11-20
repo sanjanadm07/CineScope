@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
     @AppStorage("isLoggedIn") private var isLoggedIn = false
+    @EnvironmentObject private var coordinator: AppCoordinator
     init() {
         do {
             let appConfig = try AppConfiguration()
@@ -96,13 +97,19 @@ extension HomeView {
                         Task {
                             await viewModel.loadNextPopularPage()
                         }
+                    }, onMovieSelected: { movie in
+                        coordinator.showMovieDetail(movie: movie)
                     })
                 
                 // trending movie cards view
-                MovieCardView(movies: viewModel.trendingMovies, heading: "Trending Movies")
+                MovieCardView(movies: viewModel.trendingMovies, heading: "Trending Movies", onMovieSelected: { movie in
+                    coordinator.showMovieDetail(movie: movie)
+                })
                 
                 // upcoming movie cards view
-                MovieCardView(movies: viewModel.upcomingMovies, heading: "Upcoming Movies")
+                MovieCardView(movies: viewModel.upcomingMovies, heading: "Upcoming Movies", onMovieSelected: { movie in
+                    coordinator.showMovieDetail(movie: movie)
+                })
             } else if viewModel.isSearchLoading {
                 ProgressView()
                     .tint(.white)
@@ -114,7 +121,9 @@ extension HomeView {
                     .padding()
             } else {
                 // searched rsults
-                MovieCardView(movies: viewModel.searchResults, heading: "Search Results")
+                MovieCardView(movies: viewModel.searchResults, heading: "Search Results", onMovieSelected: { movie in
+                    coordinator.showMovieDetail(movie: movie)
+                })
             }
         }
     }
