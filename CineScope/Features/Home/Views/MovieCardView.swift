@@ -14,6 +14,9 @@ struct MovieCardView: View {
     var paginationError: String? = nil
     var onLastMovieAppeared: (() -> Void)? = nil
     var onRetry: (() -> Void)? = nil
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(sortDescriptors: [])
+    private var favorite: FetchedResults<FavoriteMovie>
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -96,11 +99,29 @@ extension MovieCardView {
                     .lineLimit(1)
                     .foregroundStyle(.primary)
                 
-                if let date = movie.releaseDate {
-                    Text(date)
-                        .font(.caption)
-                        .lineLimit(1)
-                        .foregroundStyle(.secondary)
+                HStack {
+                    if let date = movie.releaseDate {
+                        Text(date)
+                            .font(.caption)
+                            .lineLimit(1)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button {
+                        toggleFavorite(movie)
+                    } label: {
+                        Image(
+                            systemName: isFavorite(movie)
+                                ? "heart.fill"
+                                : "heart"
+                        )
+                        .foregroundStyle(
+                            isFavorite(movie) ? .red : .gray
+                        )
+                        .font(.title3)
+                    }
+                    .buttonStyle(.plain)
+                    
                 }
                 
             }
@@ -156,6 +177,33 @@ extension MovieCardView {
         MoviePosterView(posterPath: movie.posterURL)
             .frame(width: 150, height: 220)
             .clipped()
+    }
+    
+    func isFavorite(_ movie: Movie) -> Bool {
+        favorite.contains{
+            $0.movieId == Int64(movie.id)
+        }
+    }
+    
+    func toggleFavorite(_ movie: Movie) {
+        if let existingFav = favorite.first(where: {
+            $0.movieId == Int64(movie.id)
+        }) {
+            viewContext.delete(existingFav)
+        } else {
+            let favorite = FavoriteMovie(context: viewContext)
+            favorite.movieId = Int64(movie.id)
+            favorite.title = movie.title
+            favorite.posterPath = movie.posterPath
+            favorite.releaseDate = movie.releaseDate
+             favorite.voteAverage = movie.voteAverage
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            print("faied to update favorite : \(error)")
+            viewContext.rollback()
+        }
     }
     
 }

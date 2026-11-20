@@ -7,7 +7,7 @@ struct ContentView: View {
         ZStack {
             if isActive {
                 if isLoggedIn {
-                    HomeView()
+                    MainTabView()
                 } else {
                     LoginView(authRepo: AuthRepositoryImpl(authService: MockAuthServices()))
                 }
